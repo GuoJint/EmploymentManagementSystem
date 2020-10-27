@@ -5,6 +5,15 @@
 			"style": {
 				"navigationBarTitleText": "uni-app"
 			}
+		},
+		{
+			"path":"pages/messsage/message"
+		},
+		{
+			"path":"pages/user/user"
+		},
+		{
+			"path":"pages/user/user"
 		}
 	],
 	"globalStyle": {
@@ -12,5 +21,21 @@
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar":{
+		"list":[
+			{
+				"text":"主页",
+				"pagePath":"pages/index/index"
+			},
+			{
+				"text":"消息",
+				"pagePath":"pages/messsage/message"
+			},
+			{
+				"text":"我的",
+				"pagePath":"pages/user/user"
+			}
+		]
 	}
 }

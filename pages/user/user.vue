@@ -1,25 +1,24 @@
 <template>
-	<view class="content">
-		
+	<view class="">
+		user
 	</view>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				title: 'Hello'
+	export default{
+		data(){
+			return{
+				
 			}
 		},
 		onLoad() {
-
+		
 		},
 		methods: {
-
+		
 		}
 	}
 </script>
 
 <style>
-	
 </style>
