@@ -13,10 +13,14 @@
 			"path":"pages/user/user"
 		},
 		{
-			"path":"pages/user/user"
+			"path":"pages/login/login"
+		},
+		{
+			"path":"pages/login/register"
 		}
 	],
 	"globalStyle": {
+		"navigationStyle":"custom",
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
@@ -37,5 +41,8 @@
 				"pagePath":"pages/user/user"
 			}
 		]
+	},
+	"easycom": {
+		"^u-(.*)": "@/uview-ui/components/u-$1/u-$1.vue"
 	}
 }
