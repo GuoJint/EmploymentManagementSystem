@@ -47,7 +47,7 @@
 
 <style lang="scss">
 	body{
-		background-image: url(../../static/img/loginIMG4.jpg);
+		background-image: url(../../static/img/loginIMG6.jpg);
 		.content{
 			margin-top: 400rpx;
 			.title,.loginForm,.items{

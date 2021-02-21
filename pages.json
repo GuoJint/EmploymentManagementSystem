@@ -17,6 +17,18 @@
 		},
 		{
 			"path":"pages/login/register"
+		},
+		{
+			"path":"pages/index/sourceCollection/sourceCollection"
+		},
+		{
+			"path":"pages/index/jobRegister/jobRegister"
+		},
+		{
+			"path":"pages/index/recruit/recruit"
+		},
+		{
+			"path":"pages/index/resume/resume"
 		}
 	],
 	"globalStyle": {

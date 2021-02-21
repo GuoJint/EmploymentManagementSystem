@@ -13,7 +13,7 @@
 				</schoolPicker>
 				<schoolPicker :onlySchool='false' themeColor="#000" ref="schoolPicker2" @onConfirm="onConfirm2">
 				</schoolPicker>
-				<u-form :model="form" :labelStyle="{color:'#F8F8F2'}" label-width=70px ref="uForm">
+				<u-form ref="uForm" :model="form" :labelStyle="{color:'#F8F8F2'}" label-width=70px>
 					<u-form-item label="注册类型" prop="types">
 						<u-input v-model="form.types" type="select" @click="show = true" placeholder="请选择注册类型"/>
 						<u-action-sheet :list="actionSheetList" v-model="show" @click="seletorType"></u-action-sheet>
@@ -21,17 +21,17 @@
 					<u-form-item label="姓名" prop="userName">
 						<u-input v-model="form.userName" placeholder="请输入姓名"/>
 					</u-form-item>
-					<view class="deepColor">
+					<view>
 						<u-form-item label="学号/工号"  prop="userNumber">
 							<u-input v-model="form.userNumber" placeholder="请输入学号/工号"/>
 						</u-form-item>
-						<u-form-item label="手机号"  prop="phone">
+						<!-- <u-form-item label="手机号"  prop="phone">
 							<u-input v-model="form.phone" placeholder="请输入手机号"/>
 						</u-form-item>
 						<u-form-item class="verfCode" label="验证码"  prop="verfCode">
 							<u-input v-model="form.verfCode" placeholder="请输入验证码"/>
 							<button class="getVerfCode" size="mini" type="default" :disabled="isGetCode" @click="getVerfCode">{{isGetCode?count:code}}</button>
-						</u-form-item>
+						</u-form-item> -->
 					</view>
 					<u-form-item label="密码" prop="psw">
 						<u-input type="password" v-model="form.psw" placeholder="请输入密码"/>
@@ -87,6 +87,38 @@
 					psw:'',
 					confirmPSW:'',
 					types:'',
+				},
+				rules:{
+					userName: { 
+						required: true, 
+						message: '请输入姓名', 
+						trigger: ['blur'],
+					},
+					userNumber: {
+						required: true, 
+						message: '请输入学号/工号', 
+						trigger: ['blur'],
+					},
+					psw: {
+						required: true, 
+						message: '请输入密码', 
+						trigger: ['blur'],
+					},
+					confirmPSW: {
+						required: true, 
+						message: '请确认密码一致', 
+						trigger: ['blur'],
+						validator: (rule, value) => {
+							if (value !== this.form.psw) return false
+							return true
+						}
+					},
+					types: {
+						required: true, 
+						message: '请选择注册类型', 
+						trigger: ['change'],
+					},
+					
 				}
 			}
 		},
@@ -115,13 +147,18 @@
 				})
 			},
 			register: function() {
-				this.$refs.uToast.show({
-					title: '注册成功',
-					type: 'success',
-					duration: 1000,
-					back: true,
-
+				console.log(this.form)
+				this.$refs.uForm.validate(valid => {
+					if (valid) {
+						this.$refs.uToast.show({
+							title: '注册成功',
+							type: 'success',
+							duration: 1000,
+							back: true,
+						})
+					}
 				})
+				
 			},
 			/*
 			学生或者老师的选择值返回回调
@@ -154,14 +191,16 @@
 			onConfirm2(e) {
 				this.schoolData = e.label.split("-").reverse().find(v => v != '所有');
 			}
-
+		},
+		onReady() {
+			this.$refs.uForm.setRules(this.rules);
 		}
 	}
 </script>
 
 <style lang="scss">
 	body {
-		background-image: url(../../static/img/loginIMG4.jpg);
+		background-image: url(../../static/img/loginIMG6.jpg);
 		.content {
 			margin-top: 50rpx;
 			.title,
