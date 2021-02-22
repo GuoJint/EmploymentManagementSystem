@@ -147,14 +147,24 @@
 				})
 			},
 			register: function() {
-				console.log(this.form)
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
-						this.$refs.uToast.show({
-							title: '注册成功',
-							type: 'success',
-							duration: 1000,
-							back: true,
+						uniCloud.callFunction({
+							name: 'user',
+							data: {
+								"username": this.form.userName,
+								"password": this.form.psw,
+								"user_school": this.schoolData,
+								"user_type": this.form.types,
+								"user_number": this.form.userNumber
+							}
+						}).then(res => {
+							this.$refs.uToast.show({
+								title: '注册成功',
+								type: 'success',
+								duration: 1000,
+								back: true,
+							})
 						})
 					}
 				})

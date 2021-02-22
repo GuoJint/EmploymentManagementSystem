@@ -4,8 +4,14 @@
 			毕业生就业管理
 		</view>
 		<view class="loginForm">
-			<input class="account" type="text" value="" placeholder="账号" placeholder-style="color:#DADADA"/>
-			<input class="psw" type="text" value="" placeholder="密码" placeholder-style="color:#DADADA" password="true"/>
+			<u-form ref="uForm" :model="form" :labelStyle="{color:'#F8F8F2'}" label-width=70px>
+				<u-form-item label="账号" prop="userNumber">
+					<u-input v-model="form.userNumber" placeholder="请输入学号/工号"/>
+				</u-form-item>
+				<u-form-item label="密码" prop="password">
+					<u-input type="password" v-model="form.password" placeholder="请输入密码"/>
+				</u-form-item>
+			</u-form>
 		</view>
 		<view class="items">
 			<button class="login" type="default" @click="login()">登录</button>
@@ -25,7 +31,10 @@
 	export default{
 		data(){
 			return{
-				
+				form: {
+					userNumber: '',
+					password: ''
+				}
 			}
 		},
 		methods:{
@@ -37,8 +46,27 @@
 				})
 			},
 			login:function(){
-				uni.switchTab({
-					url:'../index/index',
+				uniCloud.callFunction({
+					name: 'getUserInfo',
+					data: {
+						"user_number": this.form.userNumber,
+						"password": this.form.password
+					}
+				}).then(res => {
+					console.log(res)
+					if (res.result.status) {
+						console.log('1')
+						uni.switchTab({
+							url:'../index/index',
+						})
+					} else {
+						console.log('2')
+						this.$refs.uToast.show({
+							title: res.result.msg,
+							type: 'error',
+							duration: 1000,
+						})
+					}
 				})
 			}
 		}
