@@ -56,6 +56,7 @@
 
 <script>
 	import aniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
+	import { mapState } from 'vuex'
 	export default {
 		data() {
 			return {
@@ -65,14 +66,22 @@
 		components:{
 			aniNavBar
 		},
-		onLoad() {
-			
+		computed: {
+			...mapState([
+				'user',
+			])
+		},
+		mounted() {
+			this.test()
 		},
 		methods: {
 			clickCard: function (val) {
 				uni.navigateTo({
 					url:`./${val}/${val}`,
 				})
+			},
+			test () {
+				console.log(this.user)
 			}
 		}
 	}

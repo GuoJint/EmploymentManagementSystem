@@ -4,7 +4,7 @@ exports.main = async (event, context) => {
 	//event为客户端上传的参数
 	const res = db.collection('user').add({
 		"username": event.username,
-		"userpsw": event.userpsw,
+		"userpsw": event.password,
 		"user_school": event.user_school,
 		"user_type": event.user_type,
 		"user_number": event.user_number,

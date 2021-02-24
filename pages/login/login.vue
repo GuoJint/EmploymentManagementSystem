@@ -24,10 +24,12 @@
 				</view>
 			</view>
 		</view>
+		<u-toast ref="uToast" />
 	</view>
 </template>
 
 <script>
+	import { mapMutations } from 'vuex'
 	export default{
 		data(){
 			return{
@@ -38,6 +40,11 @@
 			}
 		},
 		methods:{
+			...mapMutations([
+				'SET_USER_INFO',
+				'SET_USER_NUMBER',
+				'SET_USER_SCHOOL'
+			]),
 			toRegister:function(){
 				uni.navigateTo({
 					url:'./register',
@@ -55,16 +62,18 @@
 				}).then(res => {
 					console.log(res)
 					if (res.result.status) {
-						console.log('1')
 						uni.switchTab({
 							url:'../index/index',
 						})
+						this.SET_USER_INFO(res.result.data.username)
+						this.SET_USER_NUMBER(res.result.data.user_school)
+						this.SET_USER_SCHOOL(res.result.data.user_number)
 					} else {
-						console.log('2')
 						this.$refs.uToast.show({
 							title: res.result.msg,
 							type: 'error',
-							duration: 1000,
+							position: 'top',
+							duration: 2000,
 						})
 					}
 				})

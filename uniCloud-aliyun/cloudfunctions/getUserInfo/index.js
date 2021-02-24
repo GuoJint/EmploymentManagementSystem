@@ -8,11 +8,11 @@ exports.main = async (event, context) => {
 		user_number: dbcmd.eq(event.user_number),
 	})
 	.get()
-	console.log(res)
 	if (res.data.length > 0) {
 		if (res.data[0].userpsw == event.password) {
 			return {
 				"status": true,
+				"data": res.data[0],
 				"msg": "ok"
 			}
 		} else {
