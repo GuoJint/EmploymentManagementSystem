@@ -53,30 +53,33 @@
 				})
 			},
 			login:function(){
-				uniCloud.callFunction({
-					name: 'getUserInfo',
-					data: {
-						"user_number": this.form.userNumber,
-						"password": this.form.password
-					}
-				}).then(res => {
-					console.log(res)
-					if (res.result.status) {
-						uni.switchTab({
-							url:'../index/index',
-						})
-						this.SET_USER_INFO(res.result.data.username)
-						this.SET_USER_NUMBER(res.result.data.user_school)
-						this.SET_USER_SCHOOL(res.result.data.user_number)
-					} else {
-						this.$refs.uToast.show({
-							title: res.result.msg,
-							type: 'error',
-							position: 'top',
-							duration: 2000,
-						})
-					}
+				uni.switchTab({
+					url:'../index/index',
 				})
+				// uniCloud.callFunction({
+				// 	name: 'getUserInfo',
+				// 	data: {
+				// 		"user_number": this.form.userNumber,
+				// 		"password": this.form.password
+				// 	}
+				// }).then(res => {
+				// 	console.log(res)
+				// 	if (res.result.status) {
+				// 		uni.switchTab({
+				// 			url:'../index/index',
+				// 		})
+				// 		this.SET_USER_INFO(res.result.data.username)
+				// 		this.SET_USER_NUMBER(res.result.data.user_school)
+				// 		this.SET_USER_SCHOOL(res.result.data.user_number)
+				// 	} else {
+				// 		this.$refs.uToast.show({
+				// 			title: res.result.msg,
+				// 			type: 'error',
+				// 			position: 'top',
+				// 			duration: 2000,
+				// 		})
+				// 	}
+				// })
 			}
 		}
 	}
