@@ -4,7 +4,7 @@
 			<uni-nav-bar statusBar="true" color="white" left-icon="back" left-text="返回" @clickLeft="prev()"></uni-nav-bar>
 			<view class="content">
 				<view class="title">
-					<p>就业去向登记</p>
+					<p>简历编辑</p>
 				</view>
 				<view class="contentCard">
 					<u-steps class="process" :list="numList" :current="currentNu"></u-steps>
@@ -16,6 +16,9 @@
 							<u-form-item label="电话" prop="tel">
 								<u-input v-model="form.tel" placeholder="请输入电话"/>
 							</u-form-item>
+							<u-form-item label="邮箱" prop="email">
+								<u-input v-model="form.email" placeholder="请输入电话"/>
+							</u-form-item>
 							<u-form-item label="籍贯" prop="native">
 								<u-input v-model="form.native" placeholder="请输入籍贯"/>
 							</u-form-item>
@@ -25,38 +28,43 @@
 							</u-form-item>
 						</u-form>
 					</view>
-					<view v-show="currentNu === 1" class="formList jobSelect">
-						<u-radio-group v-model="jobtype" size="25px" :wrap="true">
-							<u-radio 
-								class="radio"
-								v-for="(item, index) in list" :key="index" 
-								:name="item.name"
-								:disabled="item.disabled">
-									{{item.name}}
-							</u-radio>
-						</u-radio-group>
+					<view v-show="currentNu === 2" class="formList jobSelect">
+						
 					</view>
-					<view v-show="currentNu === 2" class="formList jobArea">
+					<view v-show="currentNu === 1" class="formList jobArea">
 						<u-form ref="tForm" :model="tform" label-width=85px>
-							<u-form-item label="单位名称" prop="busName">
-								<u-input v-model="tform.busName" placeholder="请输入单位名称"/>
+							<u-form-item label="专业技能" prop="skill">
+								<u-input v-model="tform.skill" placeholder="请输入单位名称"/>
 							</u-form-item>
-							<u-form-item label="单位机构代码" prop="buscode">
-								<u-input v-model="tform.buscode" placeholder="请输入单位组织机构代码"/>
+							<span>工作经历</span>
+							<u-form-item label="公司名称" prop="busName">
+								<u-input v-model="tform.busName" placeholder="请输入单位组织机构代码"/>
 							</u-form-item>
-							<u-form-item label="起薪线" prop="money">
-								<u-input v-model="tform.money" placeholder="请输入起薪线"/>
+							<u-form-item label="职位名称" prop="jobName">
+								<u-input v-model="tform.jobName" placeholder="请输入起薪线"/>
 							</u-form-item>
-							<u-form-item label="工作职位" prop="jobName">
-								<u-input v-model="tform.jobName" placeholder="请输入工作职位"/>
+							<u-form-item label="在职时间" prop="jobtime">
+								<u-input v-model="form.jobtime" :disabled="true" placeholder="请输入毕业时间" @click="showjobtime = true"/>
+								<u-calendar v-model="showjobtime" mode="range" @change="outTime">请选择毕业时间</u-calendar>
 							</u-form-item>
-							<u-form-item label="单位规模" prop="jobScale">
-								<u-input v-model="tform.jobScale" type="select" placeholder="请选择单位规模" @click="scaleShow = true"/>
-								<u-action-sheet :list="scaleList" v-model="scaleShow" @click="scaleSelect"></u-action-sheet>
+							<span>项目经历</span>
+							<u-form-item label="项目名称" prop="projectName">
+								<u-input v-model="tform.projectName" placeholder="请输入单位组织机构代码"/>
 							</u-form-item>
-							<u-form-item label="所属行业" prop="jobtype">
-								<u-input v-model="tform.jobtype" type="select" placeholder="请选择所属行业" @click="jobShow = true"/>
-								<u-action-sheet :list="jobList" v-model="jobShow" @click="jobSelect"></u-action-sheet>
+							<u-form-item label="项目过程" prop="project">
+								<u-input v-model="tform.project" placeholder="请输入单位组织机构代码"/>
+							</u-form-item>
+							<span>教育经历</span>
+							<u-form-item label="专业" prop="major">
+								<u-input v-model="tform.major" placeholder="请输入起薪线"/>
+							</u-form-item>
+							<u-form-item label="学历" prop="education">
+								<u-input v-model="tform.education" type="select" placeholder="请选择单位规模" @click="educationShow = true"/>
+								<u-action-sheet :list="educationList" v-model="educationShow" @click="scaleSelect"></u-action-sheet>
+							</u-form-item>
+							<u-form-item label="学校性质" prop="schoolnature">
+								<u-input v-model="tform.schoolnature" type="select" placeholder="请选择单位规模" @click="natureShow = true"/>
+								<u-action-sheet :list="natureList" v-model="natureShow" @click="scaleSelect"></u-action-sheet>
 							</u-form-item>
 						</u-form>
 					</view>
@@ -78,28 +86,33 @@
 <script>
 	import aniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	export default {
+		name: 'CreateResume',
 		data() {
 			return {
 				numList: [{
-					name: '基本信息填写'
+					name: '基本信息'
 				}, {
-					name: '就业类别选择'
+					name: '简历信息'
 				}, {
-					name: '就业去向填报'
+					name: '简历预览'
 				}, ],
 				form: {
 					name: '',
 					tel: '',
+					email: '',
 					native: '',
 					outtime: '',
 				},
 				tform: {
+					skill: '',
 					busName: '',
-					buscode: '',
-					money: '',
+					major: '',
 					jobName: '',
-					jobScale: '',
-					jobtype: '',
+					jobtime: '',
+					projectName: '',
+					project: '',
+					education: '',
+					schoolnature: '',
 				},
 				rules:{
 					tel: { 
@@ -132,62 +145,35 @@
 						}
 					},
 				},
-				list: [
+				educationList :[
 					{
-						name: '协议',
-						disabled: false
+						text: '本科',
 					},
 					{
-						name: '灵活',
-						disabled: false
+						text: '硕士',
 					},
 					{
-						name: '合同',
-						disabled: false
+						text: '博士',
 					},
 					{
-						name: '未就业',
-						disabled: false
-					},
-					{
-						name: '项目',
-						disabled: false
-					},
-					{
-						name: '报名参加专升本考试',
-						disabled: false
+						text: '专科',
 					}
 				],
-				scaleList :[
+				natureList :[
 					{
-						text: '已上市',
+						text: '全日制',
 					},
 					{
-						text: '未上市',
-					}
-				],
-				jobList :[
-					{
-						text: '新能源行业',
-					},
-					{
-						text: '互联网行业',
-					},
-					{
-						text: '医药行业',
-					},
-					{
-						text: '银行/金融行业',
-					},
-					{
-						text: '教育行业',
+						text: '非全日制',
 					},
 				],
 				// u-radio-group的v-model绑定的值如果设置为某个radio的name，就会被默认选中
 				jobtype: '',
 				currentNu: 0,
 				show: false,
-				scaleShow: false,
+				showjobtime: false,
+				natureShow: false,
+				educationShow: false,
 				jobShow: false,
 			}
 		},
@@ -242,11 +228,7 @@
 				
 			},
 			prev: function() {
-				uni.navigateBack({
-					delta: 1,
-					animationType: 'pop-out',
-					animationDuration: 200
-				})
+				this.$emit("close")
 			},
 		},
 	}
@@ -308,6 +290,7 @@
 			position: fixed;
 			bottom: 0;
 			width: 100%;
+			z-index: 999;
 			.prev,
 			.next {
 				height: 40px;
