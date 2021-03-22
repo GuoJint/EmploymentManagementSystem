@@ -28,6 +28,9 @@
 			"path":"pages/index/recruit/recruit"
 		},
 		{
+			"path":"pages/index/resume/create"
+		},
+		{
 			"path":"pages/index/resume/resume"
 		}
 	],
