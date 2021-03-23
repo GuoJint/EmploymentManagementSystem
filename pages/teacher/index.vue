@@ -1,6 +1,6 @@
 <template>
 	<view >
-		<view v-if="this.user.userType === '学生'">
+		<view >
 			<ani-nav-bar class="navBar" title="首页" statusBar="true" shadow="false" color="white"></ani-nav-bar>
 			<view class="content">
 				<view class="userInfo">
@@ -9,40 +9,32 @@
 							<image src="../../static/img/loginIMG1.jpg" mode=""></image>
 						</view>
 						<view class="detailInfo">
-							<p>郭晋廷</p>
-							<p>2017101224</p>
-							<p>山西农业大学信息学院</p>
+							<p>{{this.user.userName}}</p>
+							<p>{{this.user.userNumber}}</p>
+							<p>{{this.user.userSchool}}</p>
 						</view>
 					</view>
 				</view>
 				<view class="contentCard">
-					<view class="cardA" @click="clickCard('sourceCollection')">
+					<view class="cardA" @click="clickCard2('approval')">
 						<p>
-							生源地采集
+							就业登记审批
 						</p>
 						<span class="iconfont ">
 							&#xe704;
 						</span>
 					</view>
-					<view class="cardB" @click="clickCard('jobRegister')">
+					<view class="cardB" @click="clickCard2('manage')">
 						<p>
-							就业去向登记
+							学生信息管理
 						</p>
 						<span class="iconfont ">
 							&#xe66e;
 						</span>
 					</view>
-					<view class="cardC" @click="clickCard('resume')">
+					<view class="cardD" @click="clickCard2('business')">
 						<p>
-							毕业生简历
-						</p>
-						<span class="iconfont ">
-							&#xe67b;
-						</span>
-					</view>
-					<view class="cardD" @click="clickCard('recruit')">
-						<p>
-							校园招聘会
+							招聘企业发布
 						</p>
 						<span class="iconfont ">
 							&#xe612;
@@ -51,23 +43,21 @@
 				</view>
 			</view>
 		</view>
-		<TeacherHome v-if="this.user.userType === '教师'"></TeacherHome>
 	</view>
 </template>
 
 <script>
 	import aniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
-	import TeacherHome from '../teacher/index.vue'
 	import { mapState } from 'vuex'
 	export default {
+		name: 'TeacherHome',
 		data() {
 			return {
 				title: 'Hello',
 			}
 		},
 		components:{
-			aniNavBar,
-			TeacherHome
+			aniNavBar
 		},
 		computed: {
 			...mapState([
@@ -78,9 +68,9 @@
 			this.test()
 		},
 		methods: {
-			clickCard: function (val) {
+			clickCard2: function (val) {
 				uni.navigateTo({
-					url:`./${val}/${val}`,
+					url: `../teacher/${val}`,
 				})
 			},
 			test () {
@@ -143,7 +133,7 @@
 			border-radius: 15px;
 			box-shadow: 5px 5px 5px 1px #51c4d3;
 			height: 20%;
-			margin-top: 10%;
+			margin-top: 20%;
 			display: flex;
 			align-items: center;
 			justify-content: space-around;

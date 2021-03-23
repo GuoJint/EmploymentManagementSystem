@@ -43,7 +43,8 @@
 			...mapMutations([
 				'SET_USER_INFO',
 				'SET_USER_NUMBER',
-				'SET_USER_SCHOOL'
+				'SET_USER_SCHOOL',
+				'SET_USER_TYPE'
 			]),
 			toRegister:function(){
 				uni.navigateTo({
@@ -53,33 +54,51 @@
 				})
 			},
 			login:function(){
-				uni.switchTab({
-					url:'../index/index',
-				})
-				// uniCloud.callFunction({
-				// 	name: 'getUserInfo',
-				// 	data: {
-				// 		"user_number": this.form.userNumber,
-				// 		"password": this.form.password
-				// 	}
-				// }).then(res => {
-				// 	console.log(res)
-				// 	if (res.result.status) {
-				// 		uni.switchTab({
-				// 			url:'../index/index',
-				// 		})
-				// 		this.SET_USER_INFO(res.result.data.username)
-				// 		this.SET_USER_NUMBER(res.result.data.user_school)
-				// 		this.SET_USER_SCHOOL(res.result.data.user_number)
-				// 	} else {
-				// 		this.$refs.uToast.show({
-				// 			title: res.result.msg,
-				// 			type: 'error',
-				// 			position: 'top',
-				// 			duration: 2000,
-				// 		})
-				// 	}
+				// uni.switchTab({
+				// 	url:'../index/index',
 				// })
+				uniCloud.callFunction({
+					name: 'getUserInfo',
+					data: {
+						"user_number": this.form.userNumber,
+						"password": this.form.password
+					}
+				}).then(res => {
+					console.log(res)
+					if (res.result.status) {
+						switch (res.result.data.user_type) {
+							case '学生':
+							uni.switchTab({
+								url:'../index/index',
+							})
+							break
+							case '教师':
+							uni.switchTab({
+								url:'../index/index',
+							})
+							break
+							default:
+							this.$refs.uToast.show({
+								title: '错误人员',
+								type: 'error',
+								position: 'top',
+								duration: 2000,
+							})
+							break
+						}
+						this.SET_USER_INFO(res.result.data.username)
+						this.SET_USER_NUMBER(res.result.data.user_number)
+						this.SET_USER_SCHOOL(res.result.data.user_school)
+						this.SET_USER_TYPE(res.result.data.user_type)
+					} else {
+						this.$refs.uToast.show({
+							title: res.result.msg,
+							type: 'error',
+							position: 'top',
+							duration: 2000,
+						})
+					}
+				})
 			}
 		}
 	}
