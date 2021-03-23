@@ -28,7 +28,22 @@
 			"path":"pages/index/recruit/recruit"
 		},
 		{
+			"path":"pages/index/resume/create"
+		},
+		{
 			"path":"pages/index/resume/resume"
+		},
+		{
+			"path":"pages/teacher/index"
+		},
+		{
+			"path":"pages/teacher/approval"
+		},
+		{
+			"path":"pages/teacher/manage"
+		},
+		{
+			"path":"pages/teacher/business"
 		}
 	],
 	"globalStyle": {
