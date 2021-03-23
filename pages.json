@@ -32,6 +32,18 @@
 		},
 		{
 			"path":"pages/index/resume/resume"
+		},
+		{
+			"path":"pages/teacher/index"
+		},
+		{
+			"path":"pages/teacher/approval"
+		},
+		{
+			"path":"pages/teacher/manage"
+		},
+		{
+			"path":"pages/teacher/business"
 		}
 	],
 	"globalStyle": {
