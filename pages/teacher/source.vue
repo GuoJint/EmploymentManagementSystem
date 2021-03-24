@@ -4,17 +4,16 @@
 			<uni-nav-bar statusBar="true" color="white" left-icon="back" left-text="返回" @clickLeft="prev()"></uni-nav-bar>
 			<view class="content">
 				<view class="title">
-					<p>就业登记审批</p>
+					<p>生源地审批</p>
 				</view>
 				<view class="contentCard">
 					<view class="job">
 						<view class="job-Class" v-for="(item,index) in infoList" :key="index">
 							<view class="students" @click="showModal(item)">
 								<view class="job-content">
-									<span class="nowClass">{{item.class}}</span>
-									<span>{{item.name}}</span>
+									<span>{{item.user_name}}</span>
 								</view>
-								<span class="noApproval">{{item.status}}</span>
+								<span class="noApproval">{{item.city_status}}</span>
 							</view>
 						</view>
 					</view>
@@ -59,10 +58,10 @@
 		},
 		methods: {
 			confirmInfo (e) {
-				this.db.collection('job')
+				this.db.collection('source')
 				.where({_id: `${this.nowId}`})
 				.update({
-					status: "已审批"
+					city_status: "已审批"
 				})
 				.then(res => {
 					this.getInfoList()
@@ -70,10 +69,10 @@
 				})
 			},
 			cancelInfo () {
-				this.db.collection('job')
+				this.db.collection('source')
 				.where({_id: `${this.nowId}`})
 				.update({
-					status: "已驳回"
+					city_status: "已驳回"
 				})
 				.then(res => {
 					this.getInfoList()
@@ -82,8 +81,8 @@
 			},
 			getInfoList () {
 				this.db = uniCloud.database()
-				this.db.collection('job')
-				.where('status == "未审批"')
+				this.db.collection('source')
+				.where('city_status == "未审批"')
 				.get()
 				.then(res => {
 					this.infoList = res.result.data
@@ -96,16 +95,8 @@
 				this.show = true
 				this.nowId = item._id
 				this.content = `
-				<p class="info">姓名: ${item.name}</p>
-				<p class="info">电话: ${item.tel}</p>
-				<p class="info">籍贯: ${item.native}</p>
-				<p class="info">毕业时间: ${item.outtime}</p>
-				<p class="info">公司名称: ${item.busName}</p>
-				<p class="info">公司编码: ${item.buscode}</p>
-				<p class="info">起薪线: ${item.money}</p>
-				<p class="info">工作名称: ${item.jobName}</p>
-				<p class="info">公司规模: ${item.jobScale}</p>
-				<p class="info">工作行业: ${item.jobtype}</p>
+				<p class="info">姓名: ${item.user_name}</p>
+				<p class="info">生源地: ${item.source_city}</p>
 				`
 			},
 			prev: function() {

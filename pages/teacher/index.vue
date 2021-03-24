@@ -16,12 +16,20 @@
 					</view>
 				</view>
 				<view class="contentCard">
-					<view class="cardA" @click="clickCard2('approval')">
+					<view class="cardA" @click="clickCard2('source')">
+						<p>
+							生源地审批
+						</p>
+						<span class="iconfont ">
+							&#xe704;
+						</span>
+					</view>
+					<view class="cardC" @click="clickCard2('approval')">
 						<p>
 							就业登记审批
 						</p>
 						<span class="iconfont ">
-							&#xe704;
+							&#xe66e;
 						</span>
 					</view>
 					<view class="cardB" @click="clickCard2('manage')">
@@ -29,7 +37,7 @@
 							学生信息管理
 						</p>
 						<span class="iconfont ">
-							&#xe66e;
+							&#xe67b;
 						</span>
 					</view>
 					<view class="cardD" @click="clickCard2('business')">
@@ -133,7 +141,7 @@
 			border-radius: 15px;
 			box-shadow: 5px 5px 5px 1px #51c4d3;
 			height: 20%;
-			margin-top: 20%;
+			margin-top: 10%;
 			display: flex;
 			align-items: center;
 			justify-content: space-around;
