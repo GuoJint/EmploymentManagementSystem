@@ -21,7 +21,7 @@
 							</u-form-item>
 							<u-form-item label="毕业时间" prop="outtime">
 								<u-input v-model="form.outtime" :disabled="true" placeholder="请输入毕业时间" @click="show = true"/>
-								<u-calendar v-model="show" mode="range" @change="outTime">请选择毕业时间</u-calendar>
+								<u-calendar v-model="show" mode="range" max-date="2050-01-01" @change="outTime">请选择毕业时间</u-calendar>
 							</u-form-item>
 						</u-form>
 					</view>
