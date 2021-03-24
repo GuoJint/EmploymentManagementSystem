@@ -12,11 +12,11 @@
 							<span class="iconfont ">
 								&#xe67b;
 							</span>
-							<span>
-								sxxx
+							<span class="name">
+								前端开发
 							</span>
 						</view>
-						<span>删除</span>
+						<span class="right">删除</span>
 					</view>
 					<view class="file">
 						<u-button type="primary" @click="create()">创建简历</u-button>
@@ -95,11 +95,44 @@
 		.contentCard {
 			background-color: white;
 			border-radius: 15px;
-			height: 135vw;
-			width: 600rpx;
+			height: 100vh;
+			width: 100%;
 			margin: 0 auto;
 			position: relative;
 			top: -20px;
+			.resumeList {
+				width: 80%;
+				margin: 0 auto;
+				transform: translateY(10px);
+				height: 60px;
+				border-radius: 15px;
+				box-shadow: 5px 5px 5px 1px #51c4d3;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				.left {
+					margin-left: 10px;
+					.iconfont {
+						color: #2B79FB;
+						font-size: 18px;
+					}
+					.name {
+						font-size: 16px;
+						margin: 0 10px;
+					}
+				}
+				.right {
+					margin-right: 10px;
+					font-size: 16px;
+					color: #A4CEFF;
+				}
+			}
+			.file {
+				position: fixed;
+				left: 10%;
+				bottom: 5px;
+				width: 80%;
+			}
 		}
 	}
 </style>

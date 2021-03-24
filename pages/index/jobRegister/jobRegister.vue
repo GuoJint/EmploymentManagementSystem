@@ -72,6 +72,7 @@
 				</view>
 			</view>
 		</view>
+		<u-toast ref="uToast" />
 	</view>
 </template>
 
@@ -199,7 +200,7 @@
 		},
 		methods: {
 			outTime (e) {
-				console.log(e)
+				this.form.outtime = `${e.startDate}-${e.endDate}`
 			},
 			prevStep () {
 				this.currentNu -= 1
@@ -209,7 +210,36 @@
 				console.log(this.currentNu)
 			},
 			submit () {
-				console.log('提交')
+				const db = uniCloud.database()
+				db.collection('job')
+				.add({
+					...this.form,
+					...this.tform
+				})
+				.then(suc => {
+					this.$refs.uToast.show({
+						title: '提交成功！',
+						type: 'success',
+						position: 'top',
+						duration: 2000,
+					})
+					setTimeout(()=> {
+						uni.navigateBack({
+							delta: 1,
+							animationType: 'pop-out',
+							animationDuration: 200
+						})
+					},500)
+				})
+				.catch(error => {
+					console.log(error)
+					this.$refs.uToast.show({
+						title: '提交失败！',
+						type: 'success',
+						position: 'top',
+						duration: 2000,
+					})
+				})
 			},
 			scaleSelect (index) {
 				this.tform.jobScale = this.scaleList[index].text;

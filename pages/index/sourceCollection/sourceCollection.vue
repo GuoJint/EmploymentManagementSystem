@@ -111,19 +111,35 @@
 				this.show = true
 			},
 			submit () {
-				this.$refs.uToast.show({
-					title: '提交成功！',
-					type: 'success',
-					position: 'top',
-					duration: 2000,
+				const db = uniCloud.database()
+				db.collection('source')
+				.add({
+					source_city: `${this.province},${this.city},${this.area}`,
+					city_status: false
 				})
-				setTimeout(()=> {
-					uni.navigateBack({
-						delta: 1,
-						animationType: 'pop-out',
-						animationDuration: 200
+				.then(suc => {
+					this.$refs.uToast.show({
+						title: '提交成功！',
+						type: 'success',
+						position: 'top',
+						duration: 2000,
 					})
-				},500)
+					setTimeout(()=> {
+						uni.navigateBack({
+							delta: 1,
+							animationType: 'pop-out',
+							animationDuration: 200
+						})
+					},500)
+				})
+				.catch(err => {
+					this.$refs.uToast.show({
+						title: '提交失败！',
+						type: 'error',
+						position: 'top',
+						duration: 2000,
+					})
+				})
 			},
 			prev: function() {
 				uni.navigateBack({
