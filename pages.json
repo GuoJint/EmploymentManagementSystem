@@ -40,6 +40,9 @@
 			"path":"pages/teacher/approval"
 		},
 		{
+			"path":"pages/teacher/source"
+		},
+		{
 			"path":"pages/teacher/manage"
 		},
 		{

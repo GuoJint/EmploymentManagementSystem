@@ -10,6 +10,10 @@
 					<u-steps class="process" :list="numList" :current="currentNu"></u-steps>
 					<view v-show="currentNu === 0" class="formList baseInfo">
 						<u-form ref="uForm" :rules="rules" :model="form" label-width=70px>
+							<u-form-item label="选择班级" prop="classes">
+								<u-input v-model="form.classes" type="select" @click="show = true" placeholder="请选择注册类型"/>
+								<u-action-sheet :list="actionSheetList" v-model="show" @click="seletorType"></u-action-sheet>
+							</u-form-item>
 							<u-form-item label="姓名" prop="name">
 								<u-input v-model="form.name" placeholder="请输入姓名"/>
 							</u-form-item>
@@ -93,6 +97,7 @@
 					tel: '',
 					native: '',
 					outtime: '',
+					classes: '',
 				},
 				tform: {
 					busName: '',
@@ -133,6 +138,26 @@
 						}
 					},
 				},
+				actionSheetList:[
+					{
+						text:'网络工程1701',
+					},
+					{
+						text:'网络工程1702',
+					},
+					{
+						text:'计算机科学与技术1701',
+					},
+					{
+						text:'计算机科学与技术1702',
+					},
+					{
+						text:'软件工程1701',
+					},
+					{
+						text:'软件工程1702',
+					},
+				],
 				list: [
 					{
 						name: '协议',
