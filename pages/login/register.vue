@@ -18,6 +18,10 @@
 						<u-input v-model="form.types" type="select" @click="show = true" placeholder="请选择注册类型"/>
 						<u-action-sheet :list="actionSheetList" v-model="show" @click="seletorType"></u-action-sheet>
 					</u-form-item>
+					<u-form-item label="选择班级" v-if="form.types == '学生'" prop="classes">
+						<u-input v-model="form.classes" type="select" @click="show = true" placeholder="请选择查看班级"/>
+						<u-action-sheet :list="classList" v-model="show" @click="seletorType"></u-action-sheet>
+					</u-form-item>
 					<u-form-item label="姓名" prop="userName">
 						<u-input v-model="form.userName" placeholder="请输入姓名"/>
 					</u-form-item>
@@ -33,6 +37,9 @@
 							<button class="getVerfCode" size="mini" type="default" :disabled="isGetCode" @click="getVerfCode">{{isGetCode?count:code}}</button>
 						</u-form-item> -->
 					</view>
+					<u-form-item label="班级"  prop="userclasses">
+						<u-input v-model="form.userclasses" placeholder="请输入班级"/>
+					</u-form-item>
 					<u-form-item label="密码" prop="psw">
 						<u-input type="password" v-model="form.psw" placeholder="请输入密码"/>
 					</u-form-item>
@@ -71,6 +78,7 @@
 				count: 60,
 				schoolData: '选择所在学校',
 				show:false,
+				classList: [],
 				actionSheetList:[
 					{
 						text:'学生',
@@ -82,6 +90,7 @@
 				form:{
 					userName:'',
 					userNumber:'',
+					userclasses:'',
 					phone:'',
 					verfCode:'',
 					psw:'',
@@ -122,6 +131,18 @@
 				}
 			}
 		},
+		mounted() {
+			const db = uniCloud.database()
+			db.collection('classes')
+			.get()
+			.then(res => {
+				res.result.data.forEach(item => {
+					this.classList.push({
+						text: item.classes
+					})
+				})
+			})
+		},
 		methods: {
 			/*
 			获取验证码
@@ -156,7 +177,8 @@
 								"password": this.form.psw,
 								"user_school": this.schoolData,
 								"user_type": this.form.types,
-								"user_number": this.form.userNumber
+								"user_number": this.form.userNumber,
+								"classes": this.form.userclasses
 							}
 						}).then(res => {
 							this.$refs.uToast.show({

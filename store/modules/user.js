@@ -4,6 +4,7 @@ export default {
 		userNumber: '',
 		userSchool: '',
 		userType: '',
+		userClass: '',
 	}),
 	mutations: {
 		SET_USER_INFO (state, val) {
@@ -14,6 +15,9 @@ export default {
 		},
 		SET_USER_SCHOOL (state, val) {
 			state.userSchool = val
+		},
+		SET_USER_CLASS (state, val) {
+			state.userClass = val
 		},
 		SET_USER_TYPE (state, val) {
 			state.userType = val
