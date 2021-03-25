@@ -43,6 +43,7 @@
 <script>
 	import aniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
 	import { CITY } from '../../../static/constant.js'
+	import { mapState } from 'vuex'
 	export default {
 		data() {
 			return {
@@ -58,6 +59,11 @@
 		},
 		mounted() {
 			this.initList()
+		},
+		computed: {
+			...mapState([
+				'user',
+			])
 		},
 		methods: {
 			initList () {
@@ -115,7 +121,8 @@
 				db.collection('source')
 				.add({
 					source_city: `${this.province},${this.city},${this.area}`,
-					city_status: false
+					classes: this.user.userClass,
+					user_name: this.user.userName
 				})
 				.then(suc => {
 					this.$refs.uToast.show({

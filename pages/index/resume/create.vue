@@ -24,47 +24,75 @@
 							</u-form-item>
 							<u-form-item label="毕业时间" prop="outtime">
 								<u-input v-model="form.outtime" :disabled="true" placeholder="请输入毕业时间" @click="show = true"/>
-								<u-calendar v-model="show" mode="range" @change="outTime">请选择毕业时间</u-calendar>
+								<u-calendar v-model="show" max-date="2050-01-01" mode="range" @change="outTime">请选择毕业时间</u-calendar>
 							</u-form-item>
 						</u-form>
 					</view>
 					<view v-show="currentNu === 2" class="formList jobSelect">
-						
+						<h3>基本信息</h3>
+						<view class="previewBaseInfo">
+							<p>姓名：{{form.name}}</p>
+							<view class="BI-second">
+								<p>电话：{{form.tel}}</p>
+								<p>邮箱：{{form.email}}</p>
+								<p>籍贯：{{form.native}}</p>
+							</view>
+							<p>毕业时间：{{form.outtime}}</p>
+						</view>
+						<h3>专业技能</h3>
+						<p>{{tform.skill}}</p>
+						<h3>工作经历</h3>
+						<view class="prejob">
+							<p>公司名称：{{tform.busName}}</p>
+							<p>职位名称：{{tform.jobName}}</p>
+							<p>在职时间：{{form.jobtime}}</p>
+						</view>
+						<h3>项目经历</h3>
+						<view class="prePoject">
+							<p>项目名称：{{tform.projectName}}</p>
+							<p>项目过程：{{tform.project}}</p>
+						</view>
+						<h3>教育经历</h3>
+						<view class="preEDU">
+							<span>专业：{{tform.major}}</span>
+							<span>学历：{{tform.education}}</span>
+							<span>学校性质：{{tform.schoolnature}}</span>
+						</view>
 					</view>
-					<view v-show="currentNu === 1" class="formList jobArea">
+					<view v-show="currentNu === 1" class="formList resumeInfo">
 						<u-form ref="tForm" :model="tform" label-width=85px>
 							<u-form-item label="专业技能" prop="skill">
-								<u-input v-model="tform.skill" placeholder="请输入单位名称"/>
+								<u-input v-model="tform.skill" placeholder="请输入专业技能"/>
 							</u-form-item>
-							<span>工作经历</span>
+							<p class="working">工作经历</p>
 							<u-form-item label="公司名称" prop="busName">
-								<u-input v-model="tform.busName" placeholder="请输入单位组织机构代码"/>
+								<u-input v-model="tform.busName" placeholder="请输入公司名称"/>
 							</u-form-item>
 							<u-form-item label="职位名称" prop="jobName">
-								<u-input v-model="tform.jobName" placeholder="请输入起薪线"/>
+								<u-input v-model="tform.jobName" placeholder="请输入职位名称"/>
 							</u-form-item>
 							<u-form-item label="在职时间" prop="jobtime">
-								<u-input v-model="form.jobtime" :disabled="true" placeholder="请输入毕业时间" @click="showjobtime = true"/>
-								<u-calendar v-model="showjobtime" mode="range" @change="outTime">请选择毕业时间</u-calendar>
+								<u-input v-model="form.jobtime" :disabled="true" placeholder="请输入在职时间" @click="showjobtime = true"/>
+								<u-calendar v-model="showjobtime" max-date="2050-01-01" mode="range" @change="atTime">请选择在职时间</u-calendar>
 							</u-form-item>
-							<span>项目经历</span>
+							<p class="project">项目经历</p>
 							<u-form-item label="项目名称" prop="projectName">
-								<u-input v-model="tform.projectName" placeholder="请输入单位组织机构代码"/>
+								<u-input v-model="tform.projectName" placeholder="请输入项目名称"/>
 							</u-form-item>
 							<u-form-item label="项目过程" prop="project">
-								<u-input v-model="tform.project" placeholder="请输入单位组织机构代码"/>
+								<u-input v-model="tform.project" placeholder="请输入项目过程"/>
 							</u-form-item>
-							<span>教育经历</span>
+							<p class="edu">教育经历</p>
 							<u-form-item label="专业" prop="major">
-								<u-input v-model="tform.major" placeholder="请输入起薪线"/>
+								<u-input v-model="tform.major" placeholder="请输入专业"/>
 							</u-form-item>
 							<u-form-item label="学历" prop="education">
-								<u-input v-model="tform.education" type="select" placeholder="请选择单位规模" @click="educationShow = true"/>
+								<u-input v-model="tform.education" type="select" placeholder="请选择学历" @click="educationShow = true"/>
 								<u-action-sheet :list="educationList" v-model="educationShow" @click="scaleSelect"></u-action-sheet>
 							</u-form-item>
 							<u-form-item label="学校性质" prop="schoolnature">
-								<u-input v-model="tform.schoolnature" type="select" placeholder="请选择单位规模" @click="natureShow = true"/>
-								<u-action-sheet :list="natureList" v-model="natureShow" @click="scaleSelect"></u-action-sheet>
+								<u-input v-model="tform.schoolnature" type="select" placeholder="请选择学校性质" @click="natureShow = true"/>
+								<u-action-sheet :list="natureList" v-model="natureShow" @click="jobSelect"></u-action-sheet>
 							</u-form-item>
 						</u-form>
 					</view>
@@ -185,7 +213,10 @@
 		},
 		methods: {
 			outTime (e) {
-				console.log(e)
+				this.form.outtime = `${e.startDate}-${e.endDate}`
+			},
+			atTime (e) {
+				this.form.jobtime = `${e.startDate}-${e.endDate}`
 			},
 			prevStep () {
 				this.currentNu -= 1
@@ -195,13 +226,18 @@
 				console.log(this.currentNu)
 			},
 			submit () {
-				console.log('提交')
+				const db = uniCloud.database()
+				db.collection('resume')
+				.add({
+					...this.form,
+					...this.tform
+				})
 			},
 			scaleSelect (index) {
-				this.tform.jobScale = this.scaleList[index].text;
+				this.tform.education = this.educationList[index].text;
 			},
 			jobSelect (index) {
-				this.tform.jobtype = this.jobList[index].text;
+				this.tform.schoolnature = this.natureList[index].text;
 			},
 			register: function() {
 				this.$refs.uForm.validate(valid => {
@@ -265,7 +301,7 @@
 	.contentCard{
 		background-color: white;
 		border-radius: 15px ;
-		height: 100vh;
+		height: 110vh;
 		width: 100%;
 		margin: 0 auto;
 		position: relative;
@@ -277,13 +313,22 @@
 		.baseInfo {
 			margin-top: 20px;
 		}
+		.resumeInfo {
+			.working,
+			.project,
+			.edu{
+				margin-top: 20px;
+				border-top: 1px solid #727272;
+			}
+		}
 		.jobSelect {
-			.radio {
-				display: flex;
-				justify-content: space-between;
-				width: 80%;
-				margin: 10px;
-				font-size: 18px;
+			margin-left: 10px;
+			h3 {
+				line-height: 30px;
+			}
+			p {
+				font-size: 14px;
+				line-height: 20px;
 			}
 		}
 		.footer {
