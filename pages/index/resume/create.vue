@@ -10,6 +10,9 @@
 					<u-steps class="process" :list="numList" :current="currentNu"></u-steps>
 					<view v-show="currentNu === 0" class="formList baseInfo">
 						<u-form ref="uForm" :rules="rules" :model="form" label-width=70px>
+							<u-form-item label="简历名称" prop="resumeName">
+								<u-input v-model="form.resumeName" placeholder="请输入姓名"/>
+							</u-form-item>
 							<u-form-item label="姓名" prop="name">
 								<u-input v-model="form.name" placeholder="请输入姓名"/>
 							</u-form-item>
@@ -130,6 +133,7 @@
 					email: '',
 					native: '',
 					outtime: '',
+					resumeName: ''
 				},
 				tform: {
 					skill: '',
@@ -162,15 +166,6 @@
 						required: true, 
 						message: '请选择毕业时间', 
 						trigger: ['blur'],
-					},
-					confirmPSW: {
-						required: true, 
-						message: '请确认密码一致', 
-						trigger: ['blur'],
-						validator: (rule, value) => {
-							if (value !== this.form.psw) return false
-							return true
-						}
 					},
 				},
 				educationList :[
@@ -208,8 +203,8 @@
 		components:{
 			aniNavBar
 		},
-		onLoad() {
-			
+		onReady() {
+			this.$refs.uForm.setRules(this.rules);
 		},
 		methods: {
 			outTime (e) {

@@ -11,8 +11,8 @@
 					<view v-show="currentNu === 0" class="formList baseInfo">
 						<u-form ref="uForm" :rules="rules" :model="form" label-width=70px>
 							<u-form-item label="选择班级" prop="classes">
-								<u-input v-model="form.classes" type="select" @click="show = true" placeholder="请选择注册类型"/>
-								<u-action-sheet :list="actionSheetList" v-model="show" @click="seletorType"></u-action-sheet>
+								<u-input v-model="form.classes" type="select" @click="classshow = true" placeholder="请选择注册类型"/>
+								<u-action-sheet :list="actionSheetList" v-model="classshow" @click="seletorType"></u-action-sheet>
 							</u-form-item>
 							<u-form-item label="姓名" prop="name">
 								<u-input v-model="form.name" placeholder="请输入姓名"/>
@@ -82,6 +82,7 @@
 
 <script>
 	import aniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
+	import { mapState } from 'vuex'
 	export default {
 		data() {
 			return {
@@ -127,15 +128,6 @@
 						required: true, 
 						message: '请选择毕业时间', 
 						trigger: ['blur'],
-					},
-					confirmPSW: {
-						required: true, 
-						message: '请确认密码一致', 
-						trigger: ['blur'],
-						validator: (rule, value) => {
-							if (value !== this.form.psw) return false
-							return true
-						}
 					},
 				},
 				actionSheetList:[
@@ -215,13 +207,19 @@
 				show: false,
 				scaleShow: false,
 				jobShow: false,
+				classshow: false
 			}
 		},
 		components:{
 			aniNavBar
 		},
-		onLoad() {
-			
+		computed: {
+			...mapState([
+				'user'
+			])
+		},
+		onReady() {
+			this.$refs.uForm.setRules(this.rules);
 		},
 		methods: {
 			outTime (e) {
@@ -232,14 +230,18 @@
 			},
 			nextStep () {
 				this.currentNu += 1
-				console.log(this.currentNu)
+			},
+			seletorType (index) {
+				this.form.classes = this.actionSheetList[index].text;
 			},
 			submit () {
 				const db = uniCloud.database()
 				db.collection('job')
 				.add({
 					...this.form,
-					...this.tform
+					...this.tform,
+					user_number: this.user.userNumber,
+					time: new Date().getTime()
 				})
 				.then(suc => {
 					this.$refs.uToast.show({
@@ -271,30 +273,6 @@
 			},
 			jobSelect (index) {
 				this.tform.jobtype = this.jobList[index].text;
-			},
-			register: function() {
-				this.$refs.uForm.validate(valid => {
-					if (valid) {
-						uniCloud.callFunction({
-							name: 'user',
-							data: {
-								"username": this.form.userName,
-								"password": this.form.psw,
-								"user_school": this.schoolData,
-								"user_type": this.form.types,
-								"user_number": this.form.userNumber
-							}
-						}).then(res => {
-							this.$refs.uToast.show({
-								title: '注册成功',
-								type: 'success',
-								duration: 1000,
-								back: true,
-							})
-						})
-					}
-				})
-				
 			},
 			prev: function() {
 				uni.navigateBack({

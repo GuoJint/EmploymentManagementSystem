@@ -1,0 +1,37 @@
+{
+  "id": "2169677",
+  "name": "bishe",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "5809126",
+      "name": "错情登记",
+      "font_class": "cuoqingdengji",
+      "unicode": "e66e",
+      "unicode_decimal": 58990
+    },
+    {
+      "icon_id": "9599344",
+      "name": "我的简历",
+      "font_class": "wodejianli",
+      "unicode": "e67b",
+      "unicode_decimal": 59003
+    },
+    {
+      "icon_id": "3199549",
+      "name": "招聘计划",
+      "font_class": "drxx60",
+      "unicode": "e704",
+      "unicode_decimal": 59140
+    },
+    {
+      "icon_id": "6380418",
+      "name": "招聘会",
+      "font_class": "zhaopinhui",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    }
+  ]
+}
