@@ -7,7 +7,7 @@
 					<p>生源地审批</p>
 				</view>
 				<view class="contentCard">
-					<view class="job">
+					<view class="job" v-if="infoList.length>0">
 						<view class="job-Class" v-for="(item,index) in infoList" :key="index">
 							<view class="students" @click="showModal(item)">
 								<view class="job-content">
@@ -16,6 +16,9 @@
 								<span class="noApproval">{{item.city_status}}</span>
 							</view>
 						</view>
+					</view>
+					<view class="noData" v-else>
+						<p>暂无任何信息需要审批~</p>
 					</view>
 				</view>
 			</view>
@@ -191,6 +194,10 @@
 					}
 				}
 			}
+		}
+		.noData {
+			line-height: 60px;
+			text-align: center;
 		}
 	}
 }

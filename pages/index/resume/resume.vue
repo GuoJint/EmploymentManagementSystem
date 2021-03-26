@@ -48,7 +48,7 @@
 			CreateResume
 		},
 		onLoad() {
-
+			this.initData()
 		},
 		methods: {
 			initData () {

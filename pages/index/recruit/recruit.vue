@@ -7,16 +7,21 @@
 					<p>校园招聘会</p>
 				</view>
 				<view class="contentCard">
-					<view class="resumeList" v-for="(item, index) in companyList" :key="index">
-						<view class="left">
-							<span class="iconfont ">
-								&#xe67b;
-							</span>
-							<span class="name">
-								{{item.busName}}
-							</span>
+					<view v-if="companyList.length > 0">
+						<view class="resumeList" v-for="(item, index) in companyList" :key="index">
+							<view class="left">
+								<span class="iconfont ">
+									&#xe67b;
+								</span>
+								<span class="name">
+									{{item.busName}}
+								</span>
+							</view>
+							<span class="right" @click="showModal(item)">查看</span>
 						</view>
-						<span class="right" @click="showModal(item)">查看</span>
+					</view>
+					<view class="noData" v-else>
+						<p>暂无招聘信息，请耐心等待哦~</p>
 					</view>
 				</view>
 			</view>
@@ -158,6 +163,10 @@
 				font-size: 16px;
 				color: #A4CEFF;
 			}
+		}
+		.noData {
+			line-height: 60px;
+			text-align: center;
 		}
 	}
 }

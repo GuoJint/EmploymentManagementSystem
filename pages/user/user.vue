@@ -1,19 +1,6 @@
 <template>
 	<view >
 		<u-modal
-		v-model="changepsw"
-		:show-cancel-button="true"
-		confirm-text="确认"
-		cancel-text="取消"
-		title="修改密码"
-		:async-close="true"
-		@confirm="confirmPsw"
-		@cancel="cancelPsw">
-			<view class="slot-content">
-				<rich-text :nodes="pswContent" class="confirm"></rich-text>
-			</view>
-		</u-modal>	
-		<u-modal
 		v-model="help"
 		confirm-text="关闭"
 		title="问题反馈"
@@ -42,7 +29,6 @@
 		data() {
 			return {
 				help: false,
-				changepsw: false,
 				appinfo: false,
 				helpContent: `
 				<p>...</p>
