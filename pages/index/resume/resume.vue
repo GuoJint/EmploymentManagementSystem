@@ -7,16 +7,21 @@
 					<p>毕业生简历</p>
 				</view>
 				<view class="contentCard">
-					<view class="resumeList">
-						<view class="left">
-							<span class="iconfont ">
-								&#xe67b;
-							</span>
-							<span class="name">
-								前端开发
-							</span>
+					<view v-if="resumeList.length > 0">
+						<view class="resumeList" v-for="(item, index) in resumeList" :key="index">
+							<view class="left">
+								<span class="iconfont ">
+									&#xe67b;
+								</span>
+								<span class="name">
+									{{item.resumeName}}
+								</span>
+							</view>
+							<span class="right" @click="deleteResume(index)">删除</span>
 						</view>
-						<span class="right">删除</span>
+					</view>
+					<view class="tip" v-else>
+						<p>暂无简历，请先创建简历~</p>
 					</view>
 					<view class="file">
 						<u-button type="primary" @click="create()">创建简历</u-button>
@@ -34,7 +39,8 @@
 	export default {
 		data() {
 			return {
-				currentPage: true
+				currentPage: true,
+				resumeList: []
 			}
 		},
 		components: {
@@ -45,6 +51,17 @@
 
 		},
 		methods: {
+			initData () {
+				const db = uniCloud.database()
+				db.collection('resume')
+				.get()
+				.then(res => {
+					this.resumeList = res.result.data
+				})
+			},
+			deleteResume (index) {
+				this.resumeList.splice(index, 1)
+			},
 			create:function () {
 				this.currentPage = !this.currentPage
 			},
@@ -132,6 +149,12 @@
 				left: 10%;
 				bottom: 5px;
 				width: 80%;
+			}
+			.tip {
+				p {
+					line-height: 40px;
+					text-align: center;
+				}
 			}
 		}
 	}

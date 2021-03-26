@@ -13,6 +13,9 @@
 			"path":"pages/user/user"
 		},
 		{
+			"path":"pages/user/password"
+		},
+		{
 			"path":"pages/login/login"
 		},
 		{
@@ -65,10 +68,6 @@
 			{
 				"text":"消息",
 				"pagePath":"pages/messsage/message"
-			},
-			{
-				"text":"我的",
-				"pagePath":"pages/user/user"
 			}
 		]
 	},

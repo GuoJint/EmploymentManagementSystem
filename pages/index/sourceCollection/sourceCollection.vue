@@ -122,7 +122,9 @@
 				.add({
 					source_city: `${this.province},${this.city},${this.area}`,
 					classes: this.user.userClass,
-					user_name: this.user.userName
+					user_name: this.user.userName,
+					user_number: this.user.userNumber,
+					time: new Date().getTime()
 				})
 				.then(suc => {
 					this.$refs.uToast.show({
