@@ -111,6 +111,7 @@
 				</view>
 			</view>
 		</view>
+		<u-toast ref="toast"></u-toast>
 	</view>
 </template>
 
@@ -227,36 +228,33 @@
 					...this.form,
 					...this.tform
 				})
+				.then(res => {
+					this.$refs.toast.show({
+						title: '提交成功！',
+						type: 'success',
+						position: 'top',
+						duration: 2000,
+					})
+					uni.navigateBack({
+						delta: 1,
+						animationType: 'pop-out',
+						animationDuration: 200
+					});
+				})
+				.catch(err => {
+					this.$refs.toast.show({
+						title: '提交失败！',
+						type: 'success',
+						position: 'top',
+						duration: 2000,
+					})
+				})
 			},
 			scaleSelect (index) {
 				this.tform.education = this.educationList[index].text;
 			},
 			jobSelect (index) {
 				this.tform.schoolnature = this.natureList[index].text;
-			},
-			register: function() {
-				this.$refs.uForm.validate(valid => {
-					if (valid) {
-						uniCloud.callFunction({
-							name: 'user',
-							data: {
-								"username": this.form.userName,
-								"password": this.form.psw,
-								"user_school": this.schoolData,
-								"user_type": this.form.types,
-								"user_number": this.form.userNumber
-							}
-						}).then(res => {
-							this.$refs.uToast.show({
-								title: '注册成功',
-								type: 'success',
-								duration: 1000,
-								back: true,
-							})
-						})
-					}
-				})
-				
 			},
 			prev: function() {
 				this.$emit("close")

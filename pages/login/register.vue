@@ -18,9 +18,9 @@
 						<u-input v-model="form.types" type="select" @click="show = true" placeholder="请选择注册类型"/>
 						<u-action-sheet :list="actionSheetList" v-model="show" @click="seletorType"></u-action-sheet>
 					</u-form-item>
-					<u-form-item label="选择班级" v-if="form.types == '学生'" prop="classes">
-						<u-input v-model="form.classes" type="select" @click="show = true" placeholder="请选择查看班级"/>
-						<u-action-sheet :list="classList" v-model="show" @click="seletorType"></u-action-sheet>
+					<u-form-item label="选择班级" v-if="form.types == '学生'" prop="userclasses">
+						<u-input v-model="form.userclasses" type="select" @click="classShow = true" placeholder="请选择查看班级"/>
+						<u-action-sheet :list="classList" v-model="classShow" @click="classType"></u-action-sheet>
 					</u-form-item>
 					<u-form-item label="姓名" prop="userName">
 						<u-input v-model="form.userName" placeholder="请输入姓名"/>
@@ -37,9 +37,6 @@
 							<button class="getVerfCode" size="mini" type="default" :disabled="isGetCode" @click="getVerfCode">{{isGetCode?count:code}}</button>
 						</u-form-item> -->
 					</view>
-					<u-form-item label="班级"  prop="userclasses">
-						<u-input v-model="form.userclasses" placeholder="请输入班级"/>
-					</u-form-item>
 					<u-form-item label="密码" prop="psw">
 						<u-input type="password" v-model="form.psw" placeholder="请输入密码"/>
 					</u-form-item>
@@ -78,6 +75,7 @@
 				count: 60,
 				schoolData: '选择所在学校',
 				show:false,
+				classShow: false,
 				classList: [],
 				actionSheetList:[
 					{
@@ -170,27 +168,58 @@
 			register: function() {
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
-						uniCloud.callFunction({
-							name: 'user',
-							data: {
-								"username": this.form.userName,
-								"password": this.form.psw,
-								"user_school": this.schoolData,
-								"user_type": this.form.types,
-								"user_number": this.form.userNumber,
-								"classes": this.form.userclasses
+						uniCloud.database().collection('user')
+						.where({user_number: `${this.form.userNumber}`})
+						.get()
+						.then(res => {
+							if (res.result.data.length == 0) {
+								if (this.schoolData == '选择所在学校') {
+									this.$refs.uToast.show({
+										title: '请选择学校',
+										type: 'warning',
+										duration: 1000,
+									})
+									return
+								}
+								uniCloud.callFunction({
+									name: 'user',
+									data: {
+										"username": this.form.userName,
+										"password": this.form.psw,
+										"user_school": this.schoolData,
+										"user_type": this.form.types,
+										"user_number": this.form.userNumber,
+										"classes": this.form.userclasses
+									}
+								}).then(res => {
+									this.$refs.uToast.show({
+										title: '注册成功',
+										type: 'success',
+										duration: 1000,
+										back: true,
+									})
+								})
+								.catch(err => {
+									console.log(err)
+								})
+							} else {
+								this.$refs.uToast.show({
+									title: '该学号已存在',
+									type: 'warning',
+									duration: 1000,
+								})
 							}
-						}).then(res => {
-							this.$refs.uToast.show({
-								title: '注册成功',
-								type: 'success',
-								duration: 1000,
-								back: true,
-							})
+						})
+						.catch(err => {
+							console.log(err)
 						})
 					}
 				})
 				
+			},
+			classType (index) {
+				this.form.userclasses = this.classList[index].text
+				console.log(this.form.userclasses)
 			},
 			/*
 			学生或者老师的选择值返回回调

@@ -9,29 +9,39 @@
 							<image src="../../static/img/loginIMG1.jpg" mode=""></image>
 						</view>
 						<view class="detailInfo">
-							<p>郭晋廷</p>
-							<p>2017101224</p>
-							<p>山西农业大学信息学院</p>
+							<p>{{this.user.userName}}</p>
+							<p>{{this.user.userNumber}}</p>
+							<p>{{this.user.userSchool}}</p>
 						</view>
 					</view>
 				</view>
 				<view class="contentCard">
 					<view v-if="this.user.userType == '学生'">
-						<view class="stud-message" v-for="(item, index) in studList" :key="index">
-							<view class="left">
-								<p>{{`您的${item.type}审批${item.status}，${item.status == '已驳回' ? '请重新提交！':''}`}}</p>
-								<uni-dateformat class="time" :date="item.time" format="yyyy-MM-dd hh:mm:ss"></uni-dateformat>
+						<view v-if="studList.length > 0">
+							<view class="stud-message" v-for="(item, index) in studList" :key="index">
+								<view class="left">
+									<p>{{`您的${item.type}审批${item.status}，${item.status == '已驳回' ? '请重新提交！':''}`}}</p>
+									<uni-dateformat class="time" :date="item.time" format="yyyy-MM-dd hh:mm:ss"></uni-dateformat>
+								</view>
+								<span class="delete" @click="deleteList(index)">删除</span>
 							</view>
-							<span class="delete" @click="deleteList(index)">删除</span>
+						</view>
+						<view class="noData" v-else>
+							<p>目前没有任何消息~</p>
 						</view>
 					</view>
 					<view v-else>
-						<view class="teacher-message" v-for="(item, index) in teacherList" :key="index">
-							<view class="left">
-								<p>{{`您有新的${item.type}审批${item.status}，请即时查看！`}}</p>
-								<uni-dateformat class="time" :date="item.time" format="yyyy-MM-dd hh:mm:ss"></uni-dateformat>
+						<view v-if="teacherList.length > 0">
+							<view class="teacher-message" v-for="(item, index) in teacherList" :key="index">
+								<view class="left">
+									<p>{{`您有新的${item.type}审批${item.status}，请即时查看！`}}</p>
+									<uni-dateformat class="time" :date="item.time" format="yyyy-MM-dd hh:mm:ss"></uni-dateformat>
+								</view>
+								<span class="delete" @click="deleteList(index)">删除</span>
 							</view>
-							<span class="delete" @click="deleteList(index)">删除</span>
+						</view>
+						<view class="noData" v-else>
+							<p>目前没有任何消息~</p>
 						</view>
 					</view>
 				</view>
@@ -206,6 +216,10 @@
 			p {
 				line-height: 30px;
 			}
+		}
+		.noData {
+			line-height: 60px;
+			text-align: center;
 		}
 	}
 }

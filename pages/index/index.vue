@@ -9,9 +9,9 @@
 							<image src="../../static/img/loginIMG1.jpg" mode=""></image>
 						</view>
 						<view class="detailInfo">
-							<p>郭晋廷</p>
-							<p>2017101224</p>
-							<p>山西农业大学信息学院</p>
+							<p>{{this.user.userName}}</p>
+							<p>{{this.user.userNumber}}</p>
+							<p>{{this.user.userSchool}}</p>
 						</view>
 					</view>
 				</view>
