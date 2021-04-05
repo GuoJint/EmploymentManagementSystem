@@ -259,7 +259,6 @@
 					},500)
 				})
 				.catch(error => {
-					console.log(error)
 					this.$refs.uToast.show({
 						title: '提交失败！',
 						type: 'success',

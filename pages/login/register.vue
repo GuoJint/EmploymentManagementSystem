@@ -149,7 +149,6 @@
 				this.isGetCode = true
 				let that = this
 				let cotDown = setInterval(function() {
-					console.log(that.count)
 					that.count -= 1
 					if (that.count == 0) {
 						clearInterval(cotDown)
@@ -199,9 +198,6 @@
 										back: true,
 									})
 								})
-								.catch(err => {
-									console.log(err)
-								})
 							} else {
 								this.$refs.uToast.show({
 									title: '该学号已存在',
@@ -210,16 +206,12 @@
 								})
 							}
 						})
-						.catch(err => {
-							console.log(err)
-						})
 					}
 				})
 				
 			},
 			classType (index) {
 				this.form.userclasses = this.classList[index].text
-				console.log(this.form.userclasses)
 			},
 			/*
 			学生或者老师的选择值返回回调
@@ -238,12 +230,10 @@
 			 */
 			onConfirm(e) {
 				const school = e.label.split("-")[2];
-				console.log(`源数据:${JSON.stringify(e)}`);
 				if (school === '暂未收录') {
 					return;
 				} else {
 					this.schoolData = school;
-					console.log(`学校:${school}`);
 				}
 			},
 			/**

@@ -88,7 +88,6 @@
 				this.db.collection('classes')
 				.get()
 				.then(res => {
-					console.log(res)
 					res.result.data.forEach(item => {
 						this.actionSheetList.push({
 							text: item.classes
@@ -128,21 +127,13 @@
 				.where(this.where)
 				.get()
 				.then(res => {
-					console.log(res)
 					this.jobList = res.result.data
-				})
-				.catch(err => {
-					console.log(err)
 				})
 				this.db.collection('source')
 				.where(this.where)
 				.get()
 				.then(res => {
-					console.log(res)
 					this.infoList = res.result.data
-				})
-				.catch(err => {
-					console.log(err)
 				})
 			},
 			prev: function() {

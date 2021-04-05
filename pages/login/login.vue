@@ -65,7 +65,6 @@
 						"password": this.form.password
 					}
 				}).then(res => {
-					console.log(res)
 					if (res.result.status) {
 						switch (res.result.data.user_type) {
 							case '学生':

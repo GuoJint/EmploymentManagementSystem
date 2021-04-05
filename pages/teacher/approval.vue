@@ -91,9 +91,6 @@
 				.then(res => {
 					this.infoList = res.result.data
 				})
-				.catch(err => {
-					console.log(err)
-				})
 			},
 			showModal (item) {
 				this.show = true

@@ -65,7 +65,6 @@
 					this.appinfo = true
 					break
 				}
-				console.log(this.help)
 			},
 		}
 	}

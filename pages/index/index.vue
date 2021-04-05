@@ -108,9 +108,6 @@
 				'user',
 			])
 		},
-		mounted() {
-			this.test()
-		},
 		methods: {
 			clickCard: function (val) {
 				uni.navigateTo({
@@ -128,15 +125,11 @@
 				});
 			},
 			showQuestion () {
-				console.log('231')
 				this.$refs.setInfo.showModal('help')
 			},
 			showInfo () {
 				this.$refs.setInfo.showModal('info')
 			},
-			test () {
-				console.log(this.user)
-			}
 		}
 	}
 </script>

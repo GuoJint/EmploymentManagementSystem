@@ -101,7 +101,6 @@
 							})
 						}
 					})
-					console.log(res)
 				})
 				db.collection('source')
 				.where({'user_number': `${this.user.userNumber}`})

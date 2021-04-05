@@ -5,7 +5,7 @@
 			<view class="content">
 				<view class="userInfo">
 					<view class="infoFlex">
-						<view class="userImg">
+						<view class="userImg" @click="setting =true">
 							<image src="../../static/img/loginIMG1.jpg" mode=""></image>
 						</view>
 						<view class="detailInfo">
@@ -51,6 +51,37 @@
 				</view>
 			</view>
 		</view>
+		<u-popup v-model="setting">
+			<view class="content">
+				<view class="userInfo">
+					<view class="infoFlex">
+						<view class="detailInfo">
+							<p>郭晋廷</p>
+							<p>2017101224</p>
+							<p>山西农业大学信息学院</p>
+						</view>
+					</view>
+				</view>
+				<view class="contentSet">
+					<view class="setting first" @click="outLog">
+						<span>退出登录</span>
+						<span>></span>
+					</view>
+					<view class="setting" @click="showQuestion">
+						<span>问题反馈</span>
+						<span>></span>
+					</view>
+					<view class="setting" @click="showChangePsw">
+						<span>修改密码</span>
+						<span>></span>
+					</view>
+					<view class="setting" @click="showInfo">
+						<span>关于</span>
+						<span>></span>
+					</view>
+				</view>
+			</view>
+		</u-popup>
 	</view>
 </template>
 
@@ -61,7 +92,7 @@
 		name: 'TeacherHome',
 		data() {
 			return {
-				title: 'Hello',
+				setting: false,
 			}
 		},
 		components:{
@@ -72,18 +103,23 @@
 				'user',
 			])
 		},
-		mounted() {
-			this.test()
-		},
 		methods: {
 			clickCard2: function (val) {
 				uni.navigateTo({
 					url: `../teacher/${val}`,
 				})
 			},
-			test () {
-				console.log(this.user)
-			}
+			showChangePsw () {
+				uni.navigateTo({
+					url: '../user/password',
+				});
+			},
+			showQuestion () {
+				this.$refs.setInfo.showModal('help')
+			},
+			showInfo () {
+				this.$refs.setInfo.showModal('info')
+			},
 		}
 	}
 </script>
@@ -128,6 +164,27 @@
 			}
 		}
 		
+	}
+	.contentSet {
+		background-color: white;
+		border-radius: 15px ;
+		transform: translateY(-15px);
+		width: 500rpx;
+		display: inline-block;
+		.setting {
+			height: 50px;
+			font-size: 16px;
+			border-bottom: 1px solid #F7F7FA;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			span {
+				margin: 0 10px;
+			}
+		}
+		.first {
+			margin-top: 20px;
+		}
 	}
 	.contentCard{
 		background-color: white;

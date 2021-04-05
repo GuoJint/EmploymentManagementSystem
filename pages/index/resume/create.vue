@@ -219,7 +219,6 @@
 			},
 			nextStep () {
 				this.currentNu += 1
-				console.log(this.currentNu)
 			},
 			submit () {
 				const db = uniCloud.database()
