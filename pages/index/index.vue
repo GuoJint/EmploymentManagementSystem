@@ -83,6 +83,7 @@
 				</view>
 			</view>
 		</u-popup>
+		<u-toast ref="uToast" />
 		<set-info ref="setInfo"></set-info>
 	</view>
 </template>
@@ -110,9 +111,53 @@
 		},
 		methods: {
 			clickCard: function (val) {
-				uni.navigateTo({
-					url:`./${val}/${val}`,
-				})
+				const db = uniCloud.database()
+				switch (val) {
+					case 'sourceCollection':
+					db.collection('source')
+					.where({'user_number': `${this.user.userNumber}`})
+					.get()
+					.then(res => {
+						const data = res.result.data[0]
+						if (!(data) || data.city_status == '已驳回') {
+							uni.navigateTo({
+								url:`./${val}/${val}`,
+							})
+						} else {
+							this.$refs.uToast.show({
+								title: '您已提交！',
+								type: 'error',
+								position: 'top',
+								duration: 2000,
+							})
+						}
+					})
+					break
+					case 'jobRegister':
+					db.collection('job')
+					.where({'user_number': `${this.user.userNumber}`})
+					.get()
+					.then(res => {
+						const data = res.result.data[0]
+						if (!(data) || data.status == '已驳回') {
+							uni.navigateTo({
+								url:`./${val}/${val}`,
+							})
+						} else {
+							this.$refs.uToast.show({
+								title: '您已提交！',
+								type: 'error',
+								position: 'top',
+								duration: 2000,
+							})
+						}
+					})
+					break
+					default:
+					uni.navigateTo({
+						url:`./${val}/${val}`,
+					})
+				}
 			},
 			outLog() {
 				uni.navigateTo({

@@ -23,7 +23,7 @@
 									<p>{{`您的${item.type}审批${item.status}，${item.status == '已驳回' ? '请重新提交！':''}`}}</p>
 									<uni-dateformat class="time" :date="item.time" format="yyyy-MM-dd hh:mm:ss"></uni-dateformat>
 								</view>
-								<span class="delete" @click="deleteList(index)">删除</span>
+								<span class="delete" @click="deleteList(item, index)">删除</span>
 							</view>
 						</view>
 						<view class="noData" v-else>
@@ -37,7 +37,7 @@
 									<p>{{`您有新的${item.type}审批${item.status}，请即时查看！`}}</p>
 									<uni-dateformat class="time" :date="item.time" format="yyyy-MM-dd hh:mm:ss"></uni-dateformat>
 								</view>
-								<span class="delete" @click="deleteList(index)">删除</span>
+								<span class="delete" @click="deleteList(item, index)">删除</span>
 							</view>
 						</view>
 						<view class="noData" v-else>
@@ -71,7 +71,9 @@
 				'user',
 			]),
 		},
-		onLoad() {
+		onShow() {
+			this.studList = []
+			this.teacherList = []
 			if (this.user.userType == '学生') {
 				this.initStudent()
 			} else if (this.user.userType == '教师'){
@@ -79,10 +81,48 @@
 			}
 		},
 		methods: {
-			deleteList (index) {
+			deleteList (item,index) {
+				const db = uniCloud.database()
 				if (this.user.userType == '学生') {
-					this.studList.splice(index, 1)
+					if (item.type == '生源地') {
+						db.collection('source')
+						.where({'user_number': `${item.user_number}`})
+						.update({
+							"student_message": "删除"
+						})
+						.then(res => {
+							this.studList.splice(index, 1)
+						})
+					} else {
+						db.collection('job')
+						.where({'user_number': `${item.user_number}`})
+						.update({
+							"student_message": "删除"
+						})
+						.then(res => {
+							this.studList.splice(index, 1)
+						})
+					}
 				} else if (this.user.userType == '教师'){
+					if (item.type == '生源地') {
+						db.collection('source')
+						.where({'user_number': `${item.user_number}`})
+						.update({
+							"teacher_message": "删除"
+						})
+						.then(res => {
+							this.teacherList.splice(index, 1)
+						})
+					} else {
+						db.collection('job')
+						.where({'user_number': `${item.user_number}`})
+						.update({
+							"teacher_message": "删除"
+						})
+						.then(res => {
+							this.teacherList.splice(index, 1)
+						})
+					}
 					this.teacherList.splice(index, 1)
 				}
 			},
@@ -93,11 +133,12 @@
 				.get()
 				.then(res => {
 					res.result.data.forEach(item => {
-						if (item.status != '未审批') {
+						if (item.status != '未审批' && item.student_message != '删除') {
 							this.studList.push({
 								type: '就业去向',
 								status: item.status,
-								time: item.time
+								time: item.time,
+								user_number: item.user_number
 							})
 						}
 					})
@@ -107,11 +148,12 @@
 				.get()
 				.then(res => {
 					res.result.data.forEach(item => {
-						if (item.city_status != '未审批') {
+						if (item.city_status != '未审批' && item.student_message != '删除') {
 							this.studList.push({
 								type: '生源地',
 								status: item.city_status,
-								time: item.time
+								time: item.time,
+								user_number: item.user_number
 							})
 						}
 					})
@@ -123,10 +165,11 @@
 				.get()
 				.then(res => {
 					res.result.data.forEach(item => {
-						if (item.status == '未审批') {
+						if (item.status == '未审批' && item.teacher_message != '删除') {
 							this.teacherList.push({
 								type: '就业去向',
-								status: item.status
+								status: item.status,
+								user_number: item.user_number
 							})
 						}
 					})
@@ -135,10 +178,11 @@
 				.get()
 				.then(res => {
 					res.result.data.forEach(item => {
-						if (item.status == '未审批') {
+						if (item.city_status == '未审批' && item.teacher_message != '删除') {
 							this.teacherList.push({
 								type: '生源地',
-								status: item.city_status
+								status: item.city_status,
+								user_number: item.user_number
 							})
 						}
 					})
@@ -196,6 +240,7 @@
 		height: 135vw;
 		width: 100%;
 		transform: translateY(-15px);
+		.teacher-message,
 		.stud-message {
 			margin-top: 15px;
 			height: 60px;

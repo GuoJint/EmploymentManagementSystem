@@ -8,7 +8,8 @@ exports.main = async (event, context) => {
 		"user_school": event.user_school,
 		"user_type": event.user_type,
 		"user_number": event.user_number,
-		"classes": event.classes
+		"classes": event.classes,
+		"semester": event.semester
 	})
 	
 	//返回数据给客户端

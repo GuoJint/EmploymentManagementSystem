@@ -7,6 +7,26 @@
 					<p>校园招聘会</p>
 				</view>
 				<view class="contentCard">
+					<view class="shaixuan">
+						<u-form ref="uForm" :model="form" label-width=70px>
+							<!-- <u-form-item label="薪资" prop="money">
+								<u-input v-model="form.money" type="select" placeholder="请选择薪资" @click="moneyShow = true"/>
+								<u-action-sheet :list="moneyList" v-model="moneyShow" @click="moneySelect"></u-action-sheet>
+							</u-form-item> -->
+							<u-form-item label="单位规模" prop="jobScale">
+								<u-input v-model="form.jobScale" type="select" placeholder="请选择单位规模" @click="scaleShow = true"/>
+								<u-action-sheet :list="scaleList" v-model="scaleShow" @click="scaleSelect" @close="scaleClose"></u-action-sheet>
+							</u-form-item>
+							<u-form-item label="所属行业" prop="jobtype">
+								<u-input v-model="form.jobtype" type="select" placeholder="请选择所属行业" @click="jobShow = true"/>
+								<u-action-sheet :list="jobList" v-model="jobShow" @click="jobSelect" @close="jobtypeClose"></u-action-sheet>
+							</u-form-item>
+							<u-form-item label="招聘职位" prop="jobs">
+								<u-input v-model="form.jobs" type="select" @click="jobsshow = true" placeholder="请选择招聘职位"/>
+								<u-action-sheet :list="list" v-model="jobsshow" @click="seletorType" @close="jobsClose"></u-action-sheet>
+							</u-form-item>
+						</u-form>
+					</view>
 					<view v-if="companyList.length > 0">
 						<view class="resumeList" v-for="(item, index) in companyList" :key="index">
 							<view class="left">
@@ -48,10 +68,97 @@
 	export default {
 		data() {
 			return {
+				form:{
+					money: '',
+					jobScale: '',
+					jobtype: '',
+					jobs: '',
+				},
 				companyList: [],
 				show: false,
-				content: ''
+				scaleShow: false,
+				jobShow: false,
+				moneyShow: false,
+				jobsshow: false,
+				content: '',
+				moneyList:[
+					{
+						text: '0-5000',
+					},
+					{
+						text: 'java开发工程师',
+					},
+					{
+						text: 'Android开发工程师',
+					},
+					{
+						text: '测试工程师',
+					},
+					{
+						text: '产品经理',
+					},
+				],
+				list: [
+					{
+						text: '前端开发',
+					},
+					{
+						text: 'java开发工程师',
+					},
+					{
+						text: 'Android开发工程师',
+					},
+					{
+						text: '测试工程师',
+					},
+					{
+						text: '产品经理',
+					},
+				],
+				jobList :[
+					{
+						text: '新能源行业',
+					},
+					{
+						text: '互联网行业',
+					},
+					{
+						text: '医药行业',
+					},
+					{
+						text: '银行/金融行业',
+					},
+					{
+						text: '教育行业',
+					},
+				],
+				scaleList :[
+					{
+						text: '已上市',
+					},
+					{
+						text: '未上市',
+					}
+				],
 			}
+		},
+		computed: {
+			where(){
+				let obj = {}
+				if (this.form.jobScale != '') {
+					obj['jobScale'] = `${this.form.jobScale}` 
+					// str += `jobScale=="${this.form.jobScale}"` 
+				}
+				if (this.form.jobtype != '') {
+					obj['jobtype'] = `${this.form.jobtype}` 
+					// str +=`jobtype=="${this.form.jobtype}"` 
+				}
+				if (this.form.jobs != '') {
+					obj['jobs'] = `${this.form.jobs}` 
+					// str +=`jobs=="${this.form.jobs}"` 
+				}
+			  return  obj
+			}  
 		},
 		components:{
 			aniNavBar
@@ -67,6 +174,40 @@
 				.then((res) => {
 					this.companyList = res.result.data
 				})
+			},
+			getBusiness () {
+				this.companyList = []
+				const db = uniCloud.database()
+				db.collection('company')
+				.where(this.where)
+				.get()
+				.then((res) => {
+					this.companyList = res.result.data
+				})
+			},
+			scaleClose (val) {
+				this.form.jobScale = ''
+				this.getBusiness()
+			},
+			jobtypeClose (val) {
+				this.form.jobtype = ''
+				this.getBusiness()
+			},
+			jobsClose (val) {
+				this.form.jobs = ''
+				this.getBusiness()
+			},
+			scaleSelect (index) {
+				this.form.jobScale = this.scaleList[index].text;
+				this.getBusiness()
+			},
+			jobSelect (index) {
+				this.form.jobtype = this.jobList[index].text;
+				this.getBusiness()
+			},
+			seletorType (index) {
+				this.form.jobs = this.list[index].text;
+				this.getBusiness()
 			},
 			showModal (item) {
 				this.show = true
@@ -116,6 +257,10 @@
 	} 
 }
 .content{
+	.shaixuan {
+		display: flex;
+		justify-content: space-around;
+	}
 	.title{
 		height: 300rpx;
 		background-image: linear-gradient(to right, #1677b3,#b0d5df);

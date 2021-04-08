@@ -82,11 +82,13 @@
 				</view>
 			</view>
 		</u-popup>
+		<set-info ref="setInfo"></set-info>
 	</view>
 </template>
 
 <script>
 	import aniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
+	import SetInfo from '../user/user.vue'
 	import { mapState } from 'vuex'
 	export default {
 		name: 'TeacherHome',
@@ -96,7 +98,8 @@
 			}
 		},
 		components:{
-			aniNavBar
+			aniNavBar,
+			SetInfo
 		},
 		computed: {
 			...mapState([
@@ -108,6 +111,11 @@
 				uni.navigateTo({
 					url: `../teacher/${val}`,
 				})
+			},
+			outLog() {
+				uni.navigateTo({
+					url: '../login/login',
+				});
 			},
 			showChangePsw () {
 				uni.navigateTo({

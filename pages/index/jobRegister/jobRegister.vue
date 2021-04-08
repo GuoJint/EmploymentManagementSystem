@@ -11,7 +11,7 @@
 					<view v-show="currentNu === 0" class="formList baseInfo">
 						<u-form ref="uForm" :rules="rules" :model="form" label-width=70px>
 							<u-form-item label="选择班级" prop="classes">
-								<u-input v-model="form.classes" type="select" @click="classshow = true" placeholder="请选择注册类型"/>
+								<u-input v-model="form.classes" type="select" @click="classshow = true" placeholder="请选择班级"/>
 								<u-action-sheet :list="actionSheetList" v-model="classshow" @click="seletorType"></u-action-sheet>
 							</u-form-item>
 							<u-form-item label="姓名" prop="name">
@@ -30,7 +30,7 @@
 						</u-form>
 					</view>
 					<view v-show="currentNu === 1" class="formList jobSelect">
-						<u-radio-group v-model="jobtype" size="25px" :wrap="true">
+						<u-radio-group v-model="jobtypes" size="25px" :wrap="true">
 							<u-radio 
 								class="radio"
 								v-for="(item, index) in list" :key="index" 
@@ -131,25 +131,25 @@
 					},
 				},
 				actionSheetList:[
-					{
-						text:'网络工程1701',
-					},
-					{
-						text:'网络工程1702',
-					},
-					{
-						text:'计算机科学与技术1701',
-					},
-					{
-						text:'计算机科学与技术1702',
-					},
-					{
-						text:'软件工程1701',
-					},
-					{
-						text:'软件工程1702',
-					},
-				],
+									{
+										text:'网络工程1701',
+									},
+									{
+										text:'网络工程1702',
+									},
+									{
+										text:'计算机科学与技术1701',
+									},
+									{
+										text:'计算机科学与技术1702',
+									},
+									{
+										text:'软件工程1701',
+									},
+									{
+										text:'软件工程1702',
+									},
+								],
 				list: [
 					{
 						name: '协议',
@@ -202,12 +202,13 @@
 					},
 				],
 				// u-radio-group的v-model绑定的值如果设置为某个radio的name，就会被默认选中
-				jobtype: '',
+				jobtypes: '',
 				currentNu: 0,
 				show: false,
 				scaleShow: false,
 				jobShow: false,
-				classshow: false
+				classshow: false,
+				semestershow: false
 			}
 		},
 		components:{
@@ -222,6 +223,18 @@
 			this.$refs.uForm.setRules(this.rules);
 		},
 		methods: {
+			initDate () {
+				const db = uniCloud.database()
+				db.collection('semester')
+				.get()
+				.then(res => {
+					res.result.data.forEach(item => {
+						this.semesterList.push({
+							text: item.semester
+						})
+					})
+				})
+			},
 			outTime (e) {
 				this.form.outtime = `${e.startDate}-${e.endDate}`
 			},
@@ -234,14 +247,19 @@
 			seletorType (index) {
 				this.form.classes = this.actionSheetList[index].text;
 			},
-			submit () {
+			async submit () {
 				const db = uniCloud.database()
+				await db.collection('job')
+				.where({'user_number': `${this.user.userNumber}`})
+				.remove()
 				db.collection('job')
 				.add({
 					...this.form,
 					...this.tform,
 					user_number: this.user.userNumber,
-					time: new Date().getTime()
+					time: new Date().getTime(),
+					semester: this.user.userSemester,
+					jobtypes: this.jobtypes
 				})
 				.then(suc => {
 					this.$refs.uToast.show({

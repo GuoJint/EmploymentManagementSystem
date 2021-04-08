@@ -18,6 +18,10 @@
 						<u-input v-model="form.types" type="select" @click="show = true" placeholder="请选择注册类型"/>
 						<u-action-sheet :list="actionSheetList" v-model="show" @click="seletorType"></u-action-sheet>
 					</u-form-item>
+					<u-form-item label="选择学级" v-if="form.types == '学生'" prop="semester">
+						<u-input v-model="form.semester" type="select" @click="semestershow = true" placeholder="请选择学级"/>
+						<u-action-sheet :list="semesterList" v-model="semestershow" @click="seletorType2"></u-action-sheet>
+					</u-form-item>
 					<u-form-item label="选择班级" v-if="form.types == '学生'" prop="userclasses">
 						<u-input v-model="form.userclasses" type="select" @click="classShow = true" placeholder="请选择查看班级"/>
 						<u-action-sheet :list="classList" v-model="classShow" @click="classType"></u-action-sheet>
@@ -76,7 +80,9 @@
 				schoolData: '选择所在学校',
 				show:false,
 				classShow: false,
+				semestershow: false,
 				classList: [],
+				semesterList: [],
 				actionSheetList:[
 					{
 						text:'学生',
@@ -94,6 +100,7 @@
 					psw:'',
 					confirmPSW:'',
 					types:'',
+					semester: ''
 				},
 				rules:{
 					userName: { 
@@ -131,12 +138,12 @@
 		},
 		mounted() {
 			const db = uniCloud.database()
-			db.collection('classes')
+			db.collection('semester')
 			.get()
 			.then(res => {
 				res.result.data.forEach(item => {
-					this.classList.push({
-						text: item.classes
+					this.semesterList.push({
+						text: item.semester
 					})
 				})
 			})
@@ -145,6 +152,21 @@
 			/*
 			获取验证码
 			*/
+		   seletorType2 (index) {
+		   	this.form.semester = this.semesterList[index].text;
+		   	const db = uniCloud.database()
+		   	this.classList = []
+		   	db.collection('classes')
+		   	.where({'semester': `${this.form.semester}`})
+		   	.get()
+		   	.then(res => {
+		   		res.result.data.forEach(item => {
+		   			this.classList.push({
+		   				text: item.classes
+		   			})
+		   		})
+		   	})
+		   },
 			getVerfCode: function() {
 				this.isGetCode = true
 				let that = this
@@ -188,7 +210,8 @@
 										"user_school": this.schoolData,
 										"user_type": this.form.types,
 										"user_number": this.form.userNumber,
-										"classes": this.form.userclasses
+										"classes": this.form.userclasses,
+										"semester": this.form.semester
 									}
 								}).then(res => {
 									this.$refs.uToast.show({

@@ -22,12 +22,13 @@
 				</view>
 			</view>
 		</view>
-		<u-toast ref="toast"></u-toast>
+		<u-toast ref="uToast"></u-toast>
 	</view>
 </template>
 
 <script>
 	import aniNavBar from "@/components/uni-nav-bar/uni-nav-bar.vue"
+	import { mapState } from 'vuex'
 	export default {
 		name: 'CreateResume',
 		data() {
@@ -66,18 +67,24 @@
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
 		},
+		computed: {
+			...mapState([
+				'user',
+			])
+		},
 		methods: {
 			submit () {
 				this.$refs.uForm.validate(valid => {
 					if (valid) {
 						const db = uniCloud.database()
-						db.collection({user_number: `${this.user.userNumber}`})
+						db.collection('user')
+						.where({user_number: `${this.user.userNumber}`})
 						.update({
 							userpsw: this.tform.newPsw
 						})
 						.then(res => {
 							this.$refs.uToast.show({
-								title: '注册成功',
+								title: '修改成功',
 								type: 'success',
 								duration: 1000,
 								back: true,

@@ -45,7 +45,8 @@
 				'SET_USER_NUMBER',
 				'SET_USER_SCHOOL',
 				'SET_USER_TYPE',
-				'SET_USER_CLASS'
+				'SET_USER_CLASS',
+				'SET_USER_Semester'
 			]),
 			toRegister:function(){
 				uni.navigateTo({
@@ -91,6 +92,7 @@
 						this.SET_USER_SCHOOL(res.result.data.user_school)
 						this.SET_USER_TYPE(res.result.data.user_type)
 						this.SET_USER_CLASS(res.result.data.classes)
+						this.SET_USER_Semester(res.result.data.semester)
 					} else {
 						this.$refs.uToast.show({
 							title: res.result.msg,

@@ -9,6 +9,10 @@
 				<view class="contentCard">
 					<view class="classes">
 						<u-form ref="uForm" :model="form" label-width=70px>
+							<u-form-item label="选择学级" prop="semester">
+								<u-input v-model="form.semester" type="select" @click="semestershow = true" placeholder="请选择学级"/>
+								<u-action-sheet :list="semesterList" v-model="semestershow" @click="seletorType2"></u-action-sheet>
+							</u-form-item>
 							<u-form-item label="选择班级" prop="classes">
 								<u-input v-model="form.classes" type="select" @click="show = true" placeholder="请选择查看班级"/>
 								<u-action-sheet :list="actionSheetList" v-model="show" @click="seletorType"></u-action-sheet>
@@ -16,6 +20,9 @@
 						</u-form>
 					</view>
 					<view class="list">
+						<p class="group">{{`${form.semester}学生就业率`}}</p>
+						<p class="group">{{typeof rate == 'number' ? `${ rate*100 }%`: rate}}</p>
+						<p style="color: #BEBEBE;">tips: 当前就业率根据学生填写人数计算，请以最终结果为准~</p>
 						<p class="group">学生就业信息</p>
 						<view v-if="jobList.length > 0">
 							<view class="stud" v-for="(item, index) in jobList" :key="index">
@@ -60,15 +67,19 @@
 		data() {
 			return {
 				actionSheetList: [],
+				semesterList: [],
 				jobList:[],
 				infoList: [],
 				form: {
-					classes: ''
+					classes: '',
+					semester: ''
 				},
 				db: '',
 				infoshow: false,
 				content: ``,
-				show: false
+				show: false,
+				semestershow: false,
+				rate: 0
 			}
 		},
 		components:{
@@ -85,12 +96,12 @@
 		methods: {
 			initData () {
 				this.db = uniCloud.database()
-				this.db.collection('classes')
+				this.db.collection('semester')
 				.get()
 				.then(res => {
 					res.result.data.forEach(item => {
-						this.actionSheetList.push({
-							text: item.classes
+						this.semesterList.push({
+							text: item.semester
 						})
 					})
 				})
@@ -121,19 +132,53 @@
 			confirmInfo () {
 				this.infoshow =  false
 			},
+			seletorType2 (index) {
+				this.form.semester = this.semesterList[index].text;
+				const db = uniCloud.database()
+				this.actionSheetList = []
+				db.collection('classes')
+				.where({'semester': `${this.form.semester}`})
+				.get()
+				.then(res => {
+					res.result.data.forEach(item => {
+						this.actionSheetList.push({
+							text: item.classes
+						})
+					})
+				})
+				this.form.classes = ''
+				this.infoList = []
+				this.jobList = []
+				uniCloud.callFunction({
+					name: 'getJobRate',
+					data: {
+						"semester": this.form.semester,
+					}
+				}).then(res => {
+					this.rate = res.result.rate
+				})
+			},
 			seletorType(index) {
 				this.form.classes = this.actionSheetList[index].text
 				this.db.collection('job')
 				.where(this.where)
 				.get()
 				.then(res => {
-					this.jobList = res.result.data
+					res.result.data.forEach(item => {
+						if (item.status == '已审批') {
+							this.jobList.push(item)
+						}
+					})
 				})
 				this.db.collection('source')
 				.where(this.where)
 				.get()
 				.then(res => {
-					this.infoList = res.result.data
+					res.result.data.forEach(item => {
+						if (item.city_status == '已审批') {
+							this.infoList.push(item)
+						}
+					})
 				})
 			},
 			prev: function() {
@@ -203,6 +248,11 @@
 				.watch {
 					margin-right: 20px;
 					color: #BBDDFB;
+				}
+			}
+			.noResult {
+				p {
+					color: #BEBEBE;
 				}
 			}
 		}

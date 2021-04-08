@@ -20,7 +20,7 @@
 								<u-input v-model="form.tel" placeholder="请输入电话"/>
 							</u-form-item>
 							<u-form-item label="邮箱" prop="email">
-								<u-input v-model="form.email" placeholder="请输入电话"/>
+								<u-input v-model="form.email" placeholder="请输入邮箱"/>
 							</u-form-item>
 							<u-form-item label="籍贯" prop="native">
 								<u-input v-model="form.native" placeholder="请输入籍贯"/>

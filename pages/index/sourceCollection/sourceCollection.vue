@@ -116,8 +116,11 @@
 			showList () {
 				this.show = true
 			},
-			submit () {
+			async submit () {
 				const db = uniCloud.database()
+				await db.collection('source')
+				.where({'user_number': `${this.user.userNumber}`})
+				.remove()
 				db.collection('source')
 				.add({
 					source_city: `${this.province},${this.city},${this.area}`,

@@ -17,6 +17,17 @@
 						<u-form-item label="企业福利" prop="welfare">
 							<u-input v-model="form.welfare" placeholder="请输入企业福利"/>
 						</u-form-item>
+						<u-form-item label="薪资" prop="money">
+							<u-input v-model="form.money" placeholder="请输入职位薪资"/>
+						</u-form-item>
+						<u-form-item label="单位规模" prop="jobScale">
+							<u-input v-model="form.jobScale" type="select" placeholder="请选择单位规模" @click="scaleShow = true"/>
+							<u-action-sheet :list="scaleList" v-model="scaleShow" @click="scaleSelect"></u-action-sheet>
+						</u-form-item>
+						<u-form-item label="所属行业" prop="jobtype">
+							<u-input v-model="form.jobtype" type="select" placeholder="请选择所属行业" @click="jobShow = true"/>
+							<u-action-sheet :list="jobList" v-model="jobShow" @click="jobSelect"></u-action-sheet>
+						</u-form-item>
 						<u-form-item label="招聘职位" prop="jobs">
 							<u-input v-model="form.jobs" type="select" @click="show = true" placeholder="请选择招聘职位"/>
 							<u-action-sheet :list="list" v-model="show" @click="seletorType"></u-action-sheet>
@@ -57,14 +68,44 @@
 						text: '产品经理',
 					},
 				],
+				jobList :[
+					{
+						text: '新能源行业',
+					},
+					{
+						text: '互联网行业',
+					},
+					{
+						text: '医药行业',
+					},
+					{
+						text: '银行/金融行业',
+					},
+					{
+						text: '教育行业',
+					},
+				],
+				scaleList :[
+					{
+						text: '已上市',
+					},
+					{
+						text: '未上市',
+					}
+				],
 				form: {
 					busName: '',
 					profiles: '',
 					welfare: '',
 					jobs: '',
 					busEmail: '',
+					jobtype:'',
+					jobScale:'',
+					money:''
 				},
-				show: false
+				show: false,
+				jobShow: false,
+				scaleShow: false
 			}
 		},
 		components:{
@@ -91,6 +132,12 @@
 						this.prev()
 					},300)
 				})
+			},
+			scaleSelect (index) {
+				this.tform.jobScale = this.scaleList[index].text;
+			},
+			jobSelect (index) {
+				this.tform.jobtype = this.jobList[index].text;
 			},
 			seletorType (index) {
 				this.form.jobs = this.list[index].text;
